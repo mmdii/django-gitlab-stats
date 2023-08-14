@@ -1,0 +1,20 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+flake8 = "*"
+autopep8 = "*"
+
+[packages]
+django = "==4.2.4"
+environs = "==9.5.*"
+
+[requires]
+python_version = "3.11.4"
+
+[scripts]
+lint = "flake8"
+start = "python manage.py runserver 0:8000"
+migrate = "python manage.py migrate --noinput"

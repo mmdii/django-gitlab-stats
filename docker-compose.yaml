@@ -1,0 +1,57 @@
+version: "3.8"
+
+services:
+  python:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    restart: always
+    volumes:
+      - ./:/usr/src/app
+      - python_data:/home/pyuser/.local/share/virtualenvs:z
+      - vscode_data:/home/pyuser/.vscode-server:z
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - web
+
+  db:
+    image: postgres:15-alpine
+    container_name: postgres-db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: test
+    volumes:
+      - psql_data:/var/lib/postgresql/data
+    networks:
+      - web
+
+  pgadmin:
+    image: dpage/pgadmin4:7.5
+    container_name: pgadmin4_container
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user-name@domain-name.com
+      PGADMIN_DEFAULT_PASSWORD: strong-password
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - web
+
+networks:
+  web:
+    name: web
+
+volumes:
+  python_data:
+  vscode_data:
+  psql_data:
+  pgadmin-data:
