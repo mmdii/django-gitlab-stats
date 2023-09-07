@@ -1,17 +1,18 @@
 version: "3.8"
 
 services:
-  python:
-    build:
-      dockerfile: Dockerfile
-      context: .
-    restart: always
+
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./:/usr/src/app
-      - python_data:/home/pyuser/.local/share/virtualenvs:z
-      - vscode_data:/home/pyuser/.vscode-server:z
+      - .:/code
     ports:
       - "8000:8000"
+    environment:
+      - POSTGRES_NAME=test
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test
     depends_on:
       - db
     networks:
